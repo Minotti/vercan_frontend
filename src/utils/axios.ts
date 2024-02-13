@@ -34,7 +34,7 @@ axiosServices.interceptors.response.use(response => response, error => {
 })
 
 axiosServices.interceptors.request.use(request => {
-  const token = window.localStorage.auth ? JSON.parse(window.localStorage.auth).token : null
+  const token = window.localStorage.auth_teste_vercan ? JSON.parse(window.localStorage.auth_teste_vercan).token : null
 
   if (token)
     request.headers.Authorization = `Bearer ${token}`

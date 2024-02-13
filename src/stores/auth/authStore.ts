@@ -25,11 +25,13 @@ export const useAuthStore = defineStore({
         router.push(this.returnUrl || '/dashboard')
       }).catch(_ => {
         this.loading = false
+
+        return Promise.reject()
       })
 
       this.loading = false
     },
-    async logout(expiredToken: boolean = false) {
+    async logout(expiredToken: boolean) {
       if (expiredToken) {
         this.clearCredentials()
         return

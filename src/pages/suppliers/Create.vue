@@ -2,11 +2,12 @@
 import { emptySupplier } from '@/interfaces/supplier/SupplierInterface'
 import SupplierForm from '@/pages/suppliers/components/SupplierForm.vue'
 import { useSupplierStore } from '@/stores/suppliers/supplierStore'
+import _ from 'lodash'
 
 const supplierStore = useSupplierStore()
 const { supplier } = storeToRefs(supplierStore)
 
-supplier.value = {...emptySupplier}
+supplier.value = _.cloneDeep(emptySupplier)
 </script>
 
 <template>

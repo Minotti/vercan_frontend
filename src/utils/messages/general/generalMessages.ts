@@ -1,2 +1,2 @@
-export const FORM_ERRORS: string = 'Seu formulário possui erros, corrija-os para reenviar.';
-export const FORM_SUCCESS: string = 'O formulário foi preenchido. Obrigado!';
+export const FORM_ERRORS = 'Seu formulário possui erros, corrija-os para reenviar.';
+export const FORM_SUCCESS = 'O formulário foi preenchido. Obrigado!';

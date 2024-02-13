@@ -42,6 +42,7 @@ export const useSupplierStore = defineStore({
         return Promise.reject()
       })
 
+      this.supplier = null
       this.loading = false
     },
     async update() {
@@ -52,6 +53,7 @@ export const useSupplierStore = defineStore({
         return Promise.reject()
       })
 
+      this.supplier = null
       this.loading = false
     },
     async delete(supplierId: number) {

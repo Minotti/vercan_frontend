@@ -6,6 +6,7 @@ import axios from '@/utils/axios'
 import { activeComplete, ieIndicatorComplete, supplierGatheringComplete } from '@/utils/helpers/autoComplete'
 import cnpj from "@/utils/masks/cnpj"
 import {vMaska} from "maska";
+import { toast } from 'vue3-toastify'
 
 const emit = defineEmits(['postcodeChanged'])
 
@@ -20,7 +21,7 @@ const cnpjStatus = ref()
 const lastFetchCnpj = ref()
 
 const cleanCnpj = computed(() => {
-  return supplier.value.cpf_cnpj.match(/\d+/g).join('')
+  return supplier.value.cpf_cnpj ? supplier.value.cpf_cnpj.match(/\d+/g).join('') : ''
 })
 
 const fetchingData = ref(false)
@@ -32,20 +33,28 @@ const fetchDataCnpj = async function () {
     fetchingData.value = true
 
     await axios.get(`consulta/cnpj/${cleanCnpj.value}`).then(res => {
-      cnpjStatus.value = res.data.situacao
+      if (typeof res === 'object') {
+        if (res.data.status !== 'ERROR') {
+          cnpjStatus.value = res.data.situacao
 
-      if (supplier.value) {
-        supplier.value.legal_name = res.data.nome
-        supplier.value.trade_name = res.data.fantasia
+          if (supplier.value) {
+            supplier.value.legal_name = res.data.nome
+            supplier.value.trade_name = res.data.fantasia
 
-        if (res.data.cep !== supplier.value.address.postcode) {
-          supplier.value.address.postcode = res.data.cep
-          emit('postcodeChanged')
+            if (res.data.cep !== supplier.value.address.postcode) {
+              supplier.value.address.postcode = res.data.cep
+              emit('postcodeChanged')
+            }
+          }
+
+          lastFetchCnpj.value = cleanCnpj.value
+          fetchingData.value = false
+        } else {
+          toast.error(res.data.message)
+          supplier.value.cpf_cnpj = ''
+          fetchingData.value = false
         }
       }
-
-      lastFetchCnpj.value = cleanCnpj.value
-      fetchingData.value = false
     }).catch(() => {
       fetchingData.value = false
     })

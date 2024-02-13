@@ -160,7 +160,7 @@ watch(() => supplier.value?.type, () => {
                 <v-divider></v-divider>
                 <v-btn density="compact"
                        variant="outlined"
-                       @click="removeAdditionalContact(index)"
+                       @click="removeAdditionalContact(index + 1)"
                        color="primary"
                        class="ml-5 px-3 py-1 text-lowercase"
                        size="xs">
