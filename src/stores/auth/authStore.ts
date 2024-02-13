@@ -4,7 +4,7 @@ import axios from '@/utils/axios'
 import type { UserInterface } from '@/interfaces/users/UserInterface'
 
 export const useAuthStore = defineStore({
-  id: 'auth',
+  id: 'auth_teste_vercan',
   state: () => ({
     returnUrl: null as null | string,
     user: null as null | UserInterface,
