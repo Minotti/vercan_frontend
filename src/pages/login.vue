@@ -1,5 +1,4 @@
 <script setup>
-import { isEmpty } from 'lodash'
 import { useAuthStore } from '@/stores/auth/authStore'
 import { useErrorsStore } from '@/stores/errors/errorsStore'
 import logo from '@images/logo.png?v=1'
@@ -13,11 +12,13 @@ const isPasswordVisible = ref(false)
 const authStore = useAuthStore()
 const { loading } = storeToRefs(authStore)
 
-const errorStore = useErrorsStore()
-const { hasError } = storeToRefs(errorStore)
+const errorsStore = useErrorsStore()
+const { errors } = storeToRefs(errorsStore)
 
+const unauthorized = ref(false)
 const login = async function () {
-  await authStore.login(form.value.email, form.value.password)
+  unauthorized.value = false
+  await authStore.login(form.value.email, form.value.password).catch(() => unauthorized.value = true)
 }
 </script>
 
@@ -57,6 +58,8 @@ const login = async function () {
                 v-model="form.email"
                 autofocus
                 placeholder="seuemail@email.com"
+                :error-messages="errors['email']"
+                @update:model-value="errorsStore.clearError('email')"
                 label="Email"
                 type="email"
               />
@@ -66,11 +69,13 @@ const login = async function () {
             <VCol cols="12">
               <VTextField
                 v-model="form.password"
-                label="Password"
+                label="Senha"
                 placeholder="*********"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                :error-messages="errors['password']"
+                @update:model-value="errorsStore.clearError('password')"
               />
 
               <!-- login button -->
@@ -84,7 +89,7 @@ const login = async function () {
               </v-btn>
 
               <v-alert
-                v-if="hasError"
+                v-if="unauthorized"
                 color="error"
                 class="mt-4"
               >
